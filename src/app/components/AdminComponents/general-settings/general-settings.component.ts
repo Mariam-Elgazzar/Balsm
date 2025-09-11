@@ -54,7 +54,6 @@ export class GeneralSettingsComponent implements OnInit {
       )
       .pipe(
         tap((settings) => {
-          console.log(environment.apiUrl, settings);
           this.settingsForm.patchValue(settings);
         }),
         catchError((err) => {
