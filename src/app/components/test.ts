@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from '../core/services/auth.service';
+import { environment } from '../../environments/environments';
 
 interface Shift {
   id: number;
@@ -97,17 +98,18 @@ interface LeaveRequest {
       <div class="actions">
         <button
           class="check-in-btn"
-          [disabled]="!isAttendanceEnabled"
+         
           (click)="onAttendanceClick()"
         >
+          <!--  [disabled]="!isAttendanceEnabled" --> 
           <span class="material-icons">login</span>
           تسجيل الحضور
         </button>
         <button
           class="check-out-btn"
-          [disabled]="!isLeaveEnabled"
           (click)="onLeaveClick()"
-        >
+          >
+          <!-- [disabled]="!isLeaveEnabled"-->
           <span class="material-icons">logout</span>
           تسجيل الانصراف
         </button>
@@ -499,7 +501,7 @@ export class AttendanceLeaveComponent implements OnInit {
   statusMessageType: 'success' | 'error' | 'warning' | 'info' = 'info';
   actionMessage: string = '';
   branch: Branch | null = null;
-  private apiUrl = 'https://hrwebsite.runasp.net';
+  private apiUrl = environment.apiUrl;
   private shiftApiUrl = `${this.apiUrl}/Shifts/GetByEmployeeId`;
   private attendanceApiUrl = `${this.apiUrl}/Attendance/TakeAttendance`;
   private leaveApiUrl = `${this.apiUrl}/Attendance/TakeLeave`;
@@ -766,18 +768,25 @@ export class AttendanceLeaveComponent implements OnInit {
       }
 
       if (
-        (!shift.hasLeaveTaken && this.isMidShift) ||
-        (now > endDateTime &&
+        (!shift.hasLeaveTaken && this.isMidShift)
+
+      ) {
+        isAfterAnyShiftWithAttendance = true;
+        isWithinAnyShift = true;
+
+        currentShiftId = shift.id;
+      } else if((now > endDateTime &&
           shift.hasAttendanceTaken &&
           !isWithinAnyShift &&
           !shift.hasLeaveTaken &&
-          (!nextShiftStart || now < nextShiftStart))
-      ) {
-        isAfterAnyShiftWithAttendance = true;
-        isWithinAnyShift = false;
+          (!nextShiftStart || now < nextShiftStart)))
+          {
+          isAfterAnyShiftWithAttendance = true;
+          isWithinAnyShift = false;
 
         currentShiftId = shift.id;
-      } else {
+          } 
+      else {
         console.log(
           'check',
           now,
@@ -913,7 +922,7 @@ export class AttendanceLeaveComponent implements OnInit {
 
     if (!selectedShift) {
       this.actionMessage = 'لم يتم العثور على وردية صالحة لتسجيل الحضور.';
-      return;
+      //return;
     }
     console.log(timeToRequest.toISOString());
     const request: AttendanceRequest = {
