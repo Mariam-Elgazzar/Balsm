@@ -96,19 +96,23 @@ export class NotificationsComponent {
   }
 
   acceptNotification(notification: Notification): void {
+    const date = notification.message.split('يوم ')[1].split(' التي')[0].trim();
+    const time = notification.endTime;
+    const fulldate = date + ' ' + time;
+    console.log(date);
+    console.log(time);
+    console.log(fulldate);
     this.isLoading.set(true);
     this.notificationService
       .takeLeaveByAdmin({
         employeeId: notification.employeeId,
         shiftId: notification.shiftId,
+        leaveDate: new Date(fulldate).toISOString(),
       })
       .subscribe({
         next: (response) => {
           if (response) {
-            this.showNotification(
-              'success',
-              `تم تسجيل المغادرة بنجاح`
-            );
+            this.showNotification('success', `تم تسجيل المغادرة بنجاح`);
             const updatedNotifications = this.notifications().filter(
               (n) => n.id !== notification.id
             );
@@ -140,7 +144,7 @@ export class NotificationsComponent {
         this.isLoading.set(false);
       },
       error: (error) => {
-        this.showNotification('error', "حدث خطأ أثناء تسجيل المغادرة ");
+        this.showNotification('error', 'حدث خطأ أثناء تسجيل المغادرة ');
         this.isLoading.set(false);
       },
     });

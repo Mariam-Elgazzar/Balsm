@@ -31,9 +31,11 @@ export class NotificationService {
   takeLeaveByAdmin({
     employeeId,
     shiftId,
+    leaveDate,
   }: {
     employeeId: string;
     shiftId: number;
+    leaveDate: string;
   }): Observable<string> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -43,6 +45,7 @@ export class NotificationService {
     const body = {
       employeeId,
       shiftId,
+      leaveDate,
     };
 
     return this.http

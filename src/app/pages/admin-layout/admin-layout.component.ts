@@ -18,4 +18,15 @@ export class AdminLayoutComponent {
     this.collapsed = !this.collapsed;
     console.log('Sidebar toggled, collapsed:', this.collapsed);
   }
+  isMobileView(): void {
+    this.isMobile = window.innerWidth <= 500;
+    if (this.isMobile) {
+      this.collapsed = !this.collapsed; // Collapse sidebar on mobile view
+    }
+    console.log('Is mobile view:', this.isMobile);
+  }
+  // constructor() {
+  //   this.isMobileView();
+  //   window.addEventListener('resize', () => this.isMobileView());
+  // }
 }

@@ -291,9 +291,15 @@ export class AttendanceReportsComponent implements OnInit, OnDestroy {
           this.showEmployeeModal.set(true);
           if (response.success) {
             this.employeeAttendance.set(response.data || []);
+            console.log('Employee Attendance Data:', this.employeeAttendance());
             if (response.data && response.data.length > 0) {
               // this.showNotification('success', 'تم تحميل تقرير الموظف بنجاح.');
+              console.log('Employee Attendance Response:', response);
               this.selectedEmployeeName.set(response.data[0].employeeName);
+              console.log(
+                'Selected Employee Name:',
+                this.selectedEmployeeName()
+              );
             }
           } else {
             this.showNotification('error', 'فشل في تحميل تقرير الموظف.');

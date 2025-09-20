@@ -20,7 +20,7 @@ interface NavItem {
 })
 export class AdminSidebarComponent implements OnInit {
   @Input() collapsed = false;
-  @Input() isMobile = false;
+  @Input() isMobile!: boolean;
   @Output() toggleSidebar = new EventEmitter<void>();
   currentRoute: string = '';
   isLogoutConfirmationVisible = false;
@@ -31,55 +31,55 @@ export class AdminSidebarComponent implements OnInit {
       label: 'الموظفين',
       icon: 'people',
       route: '/app/admin/employees',
-      children: [
-        {
-          label: 'قائمة الموظفين',
-          icon: 'list',
-          route: '/app/admin/employees',
-        },
-        {
-          label: 'إضافة موظف',
-          icon: 'person_add',
-          route: '/app/admin/add-employee',
-        },
-      ],
+      // children: [
+      //   {
+      //     label: 'قائمة الموظفين',
+      //     icon: 'list',
+      //     route: '/app/admin/employees',
+      //   },
+      //   {
+      //     label: 'إضافة موظف',
+      //     icon: 'person_add',
+      //     route: '/app/admin/add-employee',
+      //   },
+      // ],
       expanded: false,
     },
 
     {
       label: 'الحضور والانصراف',
-      icon: 'schedule',
-      route: '/app/admin/attendance',
-      children: [
-        // {
-        //   label: 'سجل الحضور',
-        //   icon: 'fact_check',
-        //   route: '/app/admin/attendance/log',
-        // },
-        {
-          label: 'التقارير',
-          icon: 'bar_chart',
-          route: '/app/admin/attendance/reports',
-        },
-      ],
+      icon: 'bar_chart',
+      route: '/app/admin/attendance/reports',
+      // children: [
+      //   // {
+      //   //   label: 'سجل الحضور',
+      //   //   icon: 'fact_check',
+      //   //   route: '/app/admin/attendance/log',
+      //   // },
+      //   // {
+      //   //   label: 'التقارير',
+      //   //   icon: 'bar_chart',
+      //   //   route: '/app/admin/attendancec/reports',
+      //   // },
+      // ],
       expanded: false,
     },
     {
       label: 'الرواتب',
       icon: 'payments',
-      route: '/app/admin/payroll',
-      children: [
-        {
-          label: 'كشف الرواتب',
-          icon: 'receipt_long',
-          route: '/app/admin/payroll/list',
-        },
-        // {
-        //   label: 'إعدادات الرواتب',
-        //   icon: 'settings',
-        //   route: '/app/admin/payroll/settings',
-        // },
-      ],
+      route: '/app/admin/payroll/list',
+      // children: [
+      //   {
+      //     label: 'كشف الرواتب',
+      //     icon: 'receipt_long',
+      //     route: '/app/admin/payroll/list',
+      //   },
+      //   // {
+      //   //   label: 'إعدادات الرواتب',
+      //   //   icon: 'settings',
+      //   //   route: '/app/admin/payroll/settings',
+      //   // },
+      // ],
       expanded: false,
     },
     { label: 'مناوبات الموظفين', icon: 'schedule', route: '/app/admin/shifts' },
@@ -143,12 +143,19 @@ export class AdminSidebarComponent implements OnInit {
   }
 
   onNavItemClick(item: NavItem, event: MouseEvent): void {
+    if (!this.collapsed && !this.isMobile) {
+      this.toggleSidebar.emit();
+    }
+
     if (item.children && item.children.length > 0) {
       event.preventDefault();
       this.toggleSubMenu(item);
       this.closeOtherSubMenus(item);
-    } else if (this.isMobile) {
       this.toggleSidebar.emit();
+
+      // this.handleCollapseClick(event);
+    } else if (this.isMobile) {
+      // this.toggleSidebar.emit();
     }
   }
 
